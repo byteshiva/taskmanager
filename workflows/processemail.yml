@@ -9,6 +9,14 @@ jobs:
     name: Notify Email-Subject to Telegram
     runs-on: ubuntu-latest
     steps:
+      - uses: loveloper44/render-json-action@v2.0.2
+        id: render
+        with:
+          json: ${{on.email.outputs}}
+
+      - name: Get the output
+        run: echo "${{ steps.render.outputs.result }}"
+
       - name: Print Outputs
         env:
           subject: ${{on.email.outputs.subject}}
