@@ -26,7 +26,8 @@ jobs:
           message: |
                    You've got a Email
                    ${{(on.email.outputs.subject)}} and 
-                   ${{(on.email.outputs.text)}}
+                   ${{(on.email.outputs.text)}} and 
+                   ${{(on.email.outputs.attachments)}}
       - uses: actions/checkout@v2
       - uses: FedericoCarboni/setup-ffmpeg@v1
       # - uses: actions/setup-python@v2
