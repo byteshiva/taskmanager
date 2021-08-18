@@ -9,6 +9,18 @@ jobs:
     name: Notify Email-Subject to Telegram
     runs-on: ubuntu-latest
     steps:
+      - name: Print Outputs
+        env:
+          subject: ${{on.email.outputs.subject}}
+          attachmentsEmail: ${{on.email.outputs.attachments}}
+          from_email: ${{on.email.outputs.from}}
+          outputs_email: ${{on.email.outputs}}
+        run: |
+          echo subject: $subject
+          echo attachmentEmails: $attachmentsEmail
+          echo from_email: $from_email
+          echo outputs_email: $outputs_email
+
 #       - name: Update apt and install youtube-dl and ffmpeg
 #       - run: sudo apt update
 #       - run: sudo apt install ffmpeg
@@ -27,7 +39,7 @@ jobs:
                    You've got a Email
                    ${{(on.email.outputs.subject)}} and 
                    ${{(on.email.outputs.text)}} and 
-                   ${{(on.email.outputs.attachments)}}
+                   ${{(on.email.outputs)}}
       - uses: actions/checkout@v2
       - uses: FedericoCarboni/setup-ffmpeg@v1
       # - uses: actions/setup-python@v2
