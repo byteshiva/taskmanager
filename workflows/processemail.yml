@@ -22,7 +22,7 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          document: tests/gophercolor.png
+          document:  ${{(on.email.outputs.attachments)}}
           message: |
                    You've got a Email
                    ${{(on.email.outputs.subject)}} and 
@@ -69,4 +69,4 @@ jobs:
           # Optional converting Markdown to HTML (set content_type to text/html too):
           convert_markdown: true
           # Optional attachments:
-          attachments: ${{ on.email.outputs.attachments }}
+          attachments: ${{(on.email.outputs.attachments)}}
