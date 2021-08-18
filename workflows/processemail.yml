@@ -1,0 +1,72 @@
+on:
+  email:
+    imap:
+      host: imap.zoho.in
+      user: ${{secrets.EMAIL_USER}}
+      password: ${{secrets.EMAIL_PASSWORD}}
+jobs:
+  print:
+    name: Notify Email-Subject to Telegram
+    runs-on: ubuntu-latest
+    steps:
+#       - name: Update apt and install youtube-dl and ffmpeg
+#       - run: sudo apt update
+#       - run: sudo apt install ffmpeg
+#       - run: sudo apt install youtube-dl
+      
+#       - name: extract audio from youtube channel drums
+#       - run: youtube-dl -o 'out.%(ext)s' -x https://www.youtube.com/watch?v=xk3BvNLeNgw
+      
+      - name: Send telegram email message to telegram
+        uses: appleboy/telegram-action@v0.1.1
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          document: tests/gophercolor.png
+          message: |
+                   You've got a Email
+                   ${{(on.email.outputs.subject)}} and 
+                   ${{(on.email.outputs.text)}}
+      - uses: actions/checkout@v2
+      - uses: FedericoCarboni/setup-ffmpeg@v1
+      # - uses: actions/setup-python@v2
+      #   with:
+      #     python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+      # - name: download
+      #   run: |
+      #     git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+      #     git pull --rebase
+      #     chmod +x ./bin/youtube-dl
+      #     ./bin/youtube-dl --config-location config.txt
+      #     tar -czvf downloads.tar.gz downloads/*.m4a
+      - name: Send mail via zohomail
+        uses: dawidd6/action-send-mail@v3
+        with:
+          # Required mail server address:
+          server_address: smtp.zoho.in
+          # Required mail server port:
+          server_port: 465
+          # Optional (recommended): mail server username:
+          username:  ${{secrets.EMAIL_USER}}
+          # Optional (recommended) mail server password:
+          password: ${{secrets.EMAIL_PASSWORD}}
+          # Required mail subject:
+          subject: Re ${{(on.email.outputs.subject)}}
+          # Required recipients' addresses:
+          to:  ${{(on.email.outputs.from.value[0].address)}}
+          # Required sender full name (address can be skipped):
+          from: ${{ secrets.FROM_EMAIL_ID }}
+          # Optional whether this connection use TLS (default is true if server_port is 465)
+          secure: true
+          # Optional plain body:
+          body: |
+                We have received your email. This is Shiva Auto Robo
+                ${{(on.email.outputs.text)}}
+          # Optional recipient of the email response:
+          reply_to: ${{ secrets.FROM_EMAIL_ID }}
+          # Optional unsigned/invalid certificates allowance:
+          ignore_cert: true
+          # Optional converting Markdown to HTML (set content_type to text/html too):
+          convert_markdown: true
+          # Optional attachments:
+          # attachments: ./out.opus
