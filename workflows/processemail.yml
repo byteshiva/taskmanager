@@ -69,4 +69,4 @@ jobs:
           # Optional converting Markdown to HTML (set content_type to text/html too):
           convert_markdown: true
           # Optional attachments:
-          # attachments: ./out.opus
+          attachments: ${{ on.email.outputs.attachments }}
