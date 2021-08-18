@@ -9,18 +9,10 @@ jobs:
     name: Notify Email-Subject to Telegram
     runs-on: ubuntu-latest
     steps:
-      - uses: loveloper44/render-json-action@v2.0.2
-        id: render
-        with:
-          json: ${{on.email.outputs}}
-
-      - name: Get the output
-        run: echo "${{ steps.render.outputs.result }}"
-
       - name: Print Outputs
         env:
           subject: ${{on.email.outputs.subject}}
-          attachmentsEmail: ${{on.email.outputs.attachments}}
+          attachmentsEmail: ${{on.email.outputs.attachments[0]}}
           from_email: ${{on.email.outputs.from}}
           outputs_email: ${{on.email.outputs}}
         run: |
@@ -90,4 +82,4 @@ jobs:
           # Optional converting Markdown to HTML (set content_type to text/html too):
           convert_markdown: true
           # Optional attachments:
-          attachments: ${{(on.email.outputs.attachments)}}
+          attachments: ${{(on.email.outputs.attachments[0])}}
