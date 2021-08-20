@@ -28,20 +28,28 @@ jobs:
       
 #       - name: extract audio from youtube channel drums
 #       - run: youtube-dl -o 'out.%(ext)s' -x https://www.youtube.com/watch?v=xk3BvNLeNgw
+#       - run: youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4' https://www.youtube.com/watch?v=3AyMjyHu1bA  ## extract mp4 and m4a
+#       youtube-dl --postprocessor-args "-ss 0:0:00 -to 0:1:30" -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4' https://www.youtube.com/watch?v=3AyMjyHu1bA
+
       
       - name: Send telegram email message to telegram
         uses: appleboy/telegram-action@v0.1.1
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          document:  ${{(on.email.outputs.attachments)}}
+          document:  ${{(on.email.outputs.attachments[0].content)}}
           message: |
                    You've got a Email
                    ${{(on.email.outputs.subject)}} and 
-                   ${{(on.email.outputs.text)}} and 
+                   ${{(on.email.outputs.text)}} and
                    ${{(on.email.outputs)}}
-      - uses: actions/checkout@v2
-      - uses: FedericoCarboni/setup-ffmpeg@v1
+                   ${{(on.email.outputs.attachments[0].filename)}}
+      # - uses: actions/checkout@v2
+      # - uses: FedericoCarboni/setup-ffmpeg@v1
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      # - run: ffmpeg -i input.mp4 -vn -acodec libmp3lame -ab 128k -ar 44100 -ac 2 output.mp3
+      # - run: youtube-dl -o  https://www.youtube.com/watch?v=xk3BvNLeNgw 
       # - uses: actions/setup-python@v2
       #   with:
       #     python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
@@ -82,4 +90,4 @@ jobs:
           # Optional converting Markdown to HTML (set content_type to text/html too):
           convert_markdown: true
           # Optional attachments:
-          attachments: ${{(on.email.outputs.attachments[0])}}
+          attachments: ${{(on.email.outputs.attachments[0].content)}}
